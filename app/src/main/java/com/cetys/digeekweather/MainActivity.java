@@ -2,6 +2,7 @@ package com.cetys.digeekweather;
 
 import java.util.Locale;
 
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -18,7 +19,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
+import com.cetys.digeekweather.com.cetys.digeekweather.model.CurrentWeatherFragment;
+
+public class MainActivity extends AppCompatActivity implements ActionBar.TabListener, CurrentWeatherFragment.OnCurrentWeatherInteractionListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -113,6 +116,11 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 
+    @Override
+    public void onCurrentWeatherInteraction(Uri uri) {
+
+    }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -125,8 +133,14 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
+            switch (position) {
+                case 0:
+                    return CurrentWeatherFragment.newInstance("Ensenada");
+                case 1:
+                    return PlaceholderFragment.newInstance(position + 1);
+                case 2:
+                    return PlaceholderFragment.newInstance(position + 1);
+            }
             return PlaceholderFragment.newInstance(position + 1);
         }
 
@@ -141,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return getString(R.string.title_section1).toUpperCase(l);
+                    return "Current Weather";
                 case 1:
                     return getString(R.string.title_section2).toUpperCase(l);
                 case 2:
