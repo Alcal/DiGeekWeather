@@ -14,7 +14,7 @@ import java.util.Currency;
  * Created by alejandrocastrolopez on 9/9/15.
  */
 public class ForecastDAO {
-    final String URL = "http://api.openweathermap.org/data/2.5/weather?q=Ensenada";
+    final String URL = "http://api.openweathermap.org/data/2.5/weather?q=Ensenada&APPID=7800b63f54b67a741706494f4b8c1ed3";
 
     public CurrentWeather getCurrentWeather (String city)
     {

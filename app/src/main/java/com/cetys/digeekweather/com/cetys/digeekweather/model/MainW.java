@@ -24,6 +24,20 @@ public class MainW {
     @JsonProperty("temp_max")
     private float temp_max;
 
+    @JsonProperty("sea_level")
+    private float sea_level;
+
+    @JsonProperty("grnd_level")
+    private float grnd_level;
+    
+    public float getSea_level() {
+        return sea_level;
+    }
+
+    public void setSea_level(float sea_level) {
+        this.sea_level = sea_level;
+    }
+
     public float getTemp() {
         return temp;
     }

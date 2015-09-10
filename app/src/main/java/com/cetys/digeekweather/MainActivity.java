@@ -11,15 +11,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.cetys.digeekweather.com.cetys.digeekweather.model.CurrentWeatherFragment;
 
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener, CurrentWeatherFragment.OnCurrentWeatherInteractionListener{
 

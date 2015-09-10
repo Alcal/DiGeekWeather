@@ -1,14 +1,20 @@
-package com.cetys.digeekweather.com.cetys.digeekweather.model;
+package com.cetys.digeekweather;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
 
-import com.cetys.digeekweather.R;
+import com.cetys.digeekweather.com.cetys.digeekweather.model.CurrentWeather;
+import com.cetys.digeekweather.dataaccess.ForecastDAO;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,7 +38,6 @@ public class CurrentWeatherFragment extends Fragment {
      * @param city Parameter 1.
      * @return A new instance of fragment CurrentWeatherFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static CurrentWeatherFragment newInstance(String city) {
         CurrentWeatherFragment fragment = new CurrentWeatherFragment();
         Bundle args = new Bundle();
@@ -56,8 +61,17 @@ public class CurrentWeatherFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_current_weather, container, false);
+        Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(),
+            R.array.cities, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_current_weather, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -84,6 +98,27 @@ public class CurrentWeatherFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        WeatherTask weatherTask = new WeatherTask();
+
+        weatherTask.execute("Ensenada");
+    }
+
+    public void DisplayWeather(CurrentWeather weather)
+    {
+        TextView cityTextView = (TextView)getView().findViewById(R.id.txtCity);
+        TextView weatherTextView = (TextView)getView().findViewById(R.id.txtWeather);
+        TextView weatherDescTextView = (TextView)getView().findViewById(R.id.txtWeatherDesc);
+        TextView tempTextView = (TextView)getView().findViewById(R.id.txtTemp);
+
+        cityTextView.setText(weather.getName());
+        weatherTextView.setText(weather.getWeather()[0].getMain());
+        weatherDescTextView.setText(weather.getWeather()[0].getDescription());
+        tempTextView.setText(String.valueOf(weather.getMainW().getTemp() - 273.15));
+    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -99,6 +134,22 @@ public class CurrentWeatherFragment extends Fragment {
         public void onCurrentWeatherInteraction(Uri uri);
     }
 
+    protected class WeatherTask extends AsyncTask<String, Void, CurrentWeather>
+    {
+        public ForecastDAO forecastDAO = new ForecastDAO();
 
+        @Override
+        protected CurrentWeather doInBackground(String... city) {
+            Log.i("HOME", "retrieving alumno!");
+            return forecastDAO.getCurrentWeather(city[0]);
+        }
+
+        @Override
+        public void onPostExecute(CurrentWeather weather) {
+            Log.i("ALEX", weather.getName());
+            DisplayWeather(weather);
+        }
+
+    }
 
 }
